@@ -1,0 +1,15 @@
+﻿/**
+ * @作者 田应平
+ * @创建时间 2020-09-29 13:40
+ * @QQ号码 444141300
+ * @官网 http://www.fwtai.com
+*/
+*{
+  padding:0;
+  margin:0;
+}
+a:link,a:visited,a:hover,a:active{
+  text-decoration: none;
+  outline:none;
+  color:#f00;
+}

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>首页</title>
+  <!--静态资源,无需写webroot目录,因为默认就是 webroot 目录下的文件-->
+  <link rel="shortcut icon" href="/static/favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+<body>
+<p th:text="${name}"></p>
+<p th:text="${age}"></p>
+<a href="javascript:;">链接</a>
+</body>
+</html>
