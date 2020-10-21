@@ -76,7 +76,7 @@ public class Launcher extends AbstractVerticle {
 
     //二级路由开始
     final Router restAPI = Router.router(vertx);
-    //访问方式: http://192.168.4.185/productsApi/products/485
+    //访问方式: http://192.168.3.108/productsApi/products/485
     restAPI.get("/products/:kid").handler(context -> {
       final String kid = context.request().getParam("kid");
       ToolClient.responseSucceed(context,kid+",二级路由请求成功");

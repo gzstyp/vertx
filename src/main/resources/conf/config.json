@@ -7,5 +7,5 @@
   "charset": "utf8mb4",
   "ssl": false,
   "maxSize": 32,
-  "appPort" : 88
+  "appPort" : 80
 }
