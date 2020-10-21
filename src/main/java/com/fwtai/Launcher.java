@@ -35,6 +35,7 @@ import java.util.Set;
  * @QQ号码 444141300
  * @Email service@dwlai.com
  * @官网 http://www.fwtai.com
+ * 使用vertx共享数据:https://www.cnblogs.com/endv/p/12814470.html
 */
 public class Launcher extends AbstractVerticle {
 
@@ -59,8 +60,14 @@ public class Launcher extends AbstractVerticle {
     //创建HttpServer
     final HttpServer server = vertx.createHttpServer();
 
-    //第二步,初始化|实例化 Router
+    //第二步,初始化|实例化 Router,若要添加跨域请求的话,随着就配置跨域
     router = Router.router(vertx);
+    final Set<HttpMethod> methods = new HashSet<>();
+    methods.add(HttpMethod.OPTIONS);
+    methods.add(HttpMethod.GET);
+    methods.add(HttpMethod.POST);
+    //router.route().handler(CorsHandler.create("vertx\\.io").allowedMethods(methods));//支持正则表达式
+    router.route().blockingHandler(CorsHandler.create("http://192.168.3.108").allowCredentials(true).allowedHeader("content-type").maxAgeSeconds(86400).allowedMethods(methods));
 
     // 处理静态资源,整合静态资源文件,前端无需写webroot目录,因为默认就是 webroot 目录下的文件,因为加了‘/static’所以在访问时需要添加前缀 /static/xx.xx
     router.route("/static/*").handler(StaticHandler.create());// http://192.168.3.108/static/robots.txt
@@ -79,17 +86,8 @@ public class Launcher extends AbstractVerticle {
 
     //若想要或body的参数[含表单的form-data和json格式]需要添加,可选
     router.route().handler(BodyHandler.create());//支持文件上传的目录,ctrl + p 查看
-
-    final Set<HttpMethod> methods = new HashSet<>();
-    methods.add(HttpMethod.OPTIONS);
-    methods.add(HttpMethod.GET);
-    methods.add(HttpMethod.POST);
-
     ToolLambda.getConfig(retriever).onSuccess(config ->{
       final Integer port = config.getInteger("appPort");
-      final String allowedOrigin = config.getString("allowedOrigin");
-      //router.route().handler(CorsHandler.create("vertx\\.io").allowedMethods(methods));//支持正则表达式
-      router.route().blockingHandler(CorsHandler.create(allowedOrigin).allowedMethods(methods));//支持正则表达式
       //第三步,将router和 HttpServer 绑定[若是使用配置文件则这样实例化,如果不配置文件则把它挪动到lambda外边即可]
       server.requestHandler(router).listen(port,http -> {
         if (http.succeeded()){
