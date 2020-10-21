@@ -61,7 +61,6 @@
       <groupId>io.vertx</groupId>
       <artifactId>vertx-mysql-client</artifactId>
     </dependency>
-
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-jdbc-client</artifactId>
@@ -71,12 +70,10 @@
       <artifactId>mssql-jdbc</artifactId>
       <version>6.4.0.jre8</version>
     </dependency>
-
-    <!--thymeleaf开始,注意这个版本是否-->
+    <!--thymeleaf开始-->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web-templ-thymeleaf</artifactId>
-      <version>3.9.3</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -90,10 +87,6 @@
       <artifactId>vertx-config</artifactId>
     </dependency>
     <!--认证开始-->
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-auth-common</artifactId>
-    </dependency>
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-auth-jwt</artifactId>

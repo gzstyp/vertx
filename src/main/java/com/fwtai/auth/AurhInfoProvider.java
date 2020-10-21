@@ -32,7 +32,7 @@ public class AurhInfoProvider implements AuthProvider{
       resultHandler.handle(Future.succeededFuture(user));
     }else{
       // 密码验证不通过，响应认证失败
-      resultHandler.handle(Future.failedFuture("auth failure"));
+      resultHandler.handle(Future.failedFuture("认证失败!"));
     }
   }
 }

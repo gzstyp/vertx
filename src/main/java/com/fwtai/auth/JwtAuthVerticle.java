@@ -36,9 +36,14 @@ public class JwtAuthVerticle extends AbstractVerticle {
 
     final HttpServer server = vertx.createHttpServer();
 
-    // 处理客户端请求
+    // 处理客户端请求,http://192.168.3.108:8080/?username=admin&password=admin 或 192.168.3.108:8080/?token=xxxx
     server.requestHandler(request -> {
       final JsonObject jsonObject = parseQuery(request.query());
+      if(jsonObject == null){
+        final String jsonFailure = ToolClient.jsonFailure("参数有误");
+        ToolClient.getResponse(request).end(jsonFailure);
+        return;
+      };
       // 判断用户是否带token来认证，如果带token，就直接通过token来认证，否则认为是第一次认证，通过用户名和密码的方式进行认证
       final String token = jsonObject.getString("token");
       if(token == null || token.length() <= 0){
@@ -81,7 +86,8 @@ public class JwtAuthVerticle extends AbstractVerticle {
    * @param query
    * @return
   */
-  public JsonObject parseQuery(final String query) {
+  public JsonObject parseQuery(final String query){
+    if(query == null || query.length() <= 0) return null;
     final JsonObject data = new JsonObject();
     final String[] params = query.split("&");
     for (String param : params) {
