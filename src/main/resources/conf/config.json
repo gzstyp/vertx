@@ -7,6 +7,5 @@
   "charset": "utf8mb4",
   "ssl": false,
   "maxSize": 32,
-  "appPort" : 80,
-  "allowedOrigin" : "http://192.168.3.108:8080"
+  "appPort" : 88
 }
