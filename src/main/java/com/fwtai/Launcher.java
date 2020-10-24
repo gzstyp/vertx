@@ -1,6 +1,7 @@
 package com.fwtai;
 
 import com.fwtai.service.IndexHandle;
+import com.fwtai.service.ProductHandle;
 import com.fwtai.service.SqlServerHandle;
 import com.fwtai.service.TemplateService;
 import com.fwtai.service.UrlHandle;
@@ -75,13 +76,20 @@ public class Launcher extends AbstractVerticle {
     // router.route("/*").handler(StaticHandler.create()); //ok
 
     //二级路由开始
-    final Router restAPI = Router.router(vertx);
-    //访问方式: http://192.168.3.108/productsApi/products/485
-    restAPI.get("/products/:kid").handler(context -> {
+    final Router productApi = Router.router(vertx);
+    //访问方式: http://192.168.3.108/product/add/1024
+    productApi.get("/add/:kid").blockingHandler(context -> {
       final String kid = context.request().getParam("kid");
-      ToolClient.responseSucceed(context,kid+",二级路由请求成功");
+      ToolClient.responseSucceed(context,kid+",二级路由请求成功-add方法");
     });
-    router.mountSubRouter("/productsApi",restAPI);
+    //访问方式: http://192.168.3.108/product/edit/1024
+    productApi.get("/edit/:kid").blockingHandler(context -> {
+      final String kid = context.request().getParam("kid");
+      ToolClient.responseSucceed(context,kid+",二级路由请求成功-edit方法");
+    });
+    //访问方式: http://192.168.3.108/product/list/10/1
+    productApi.get("/list/:size/:page").blockingHandler(new ProductHandle(vertx));
+    router.mountSubRouter("/product",productApi);
     //二级路由结束
 
     //若想要或body的参数[含表单的form-data和json格式]需要添加,可选
