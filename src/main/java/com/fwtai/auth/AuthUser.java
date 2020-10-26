@@ -18,7 +18,7 @@ import io.vertx.ext.auth.User;
 */
 public class AuthUser implements User{
 
-  private JsonObject authInfo;
+  private final JsonObject authInfo;
 
   public AuthUser(final JsonObject authInfo){
     this.authInfo = authInfo;
