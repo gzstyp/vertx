@@ -92,24 +92,6 @@ public class Launcher extends AbstractVerticle {
     router.mountSubRouter("/product",productApi);
     //二级路由结束
 
-    //若想要或body的参数[含表单的form-data和json格式]需要添加,可选
-    router.route().handler(BodyHandler.create());//支持文件上传的目录,ctrl + p 查看
-    ToolLambda.getConfig(retriever).onSuccess(config ->{
-      final Integer port = config.getInteger("appPort");
-      //第三步,将router和 HttpServer 绑定[若是使用配置文件则这样实例化,如果不配置文件则把它挪动到lambda外边即可]
-      server.requestHandler(router).listen(port,http -> {
-        if (http.succeeded()){
-          //startPromise.complete();
-          logger.info("---应用启动成功---"+port);
-        } else {
-          //startPromise.fail(http.cause());
-          logger.error("Launcher应用启动失败,"+http.cause());
-        }
-      });
-    }).onFailure(throwable->{
-      logger.error("Launcher读取配置文件失败,"+throwable.getMessage());
-    });
-
     //第四步,配置Router解析url
     router.get("/").blockingHandler(context -> {
       ToolClient.responseJson(context,ToolClient.jsonSucceed());
@@ -214,5 +196,24 @@ public class Launcher extends AbstractVerticle {
 
     // 前端模版引擎用法,http://127.0.0.1/thymeleaf2
     router.route("/thymeleaf2").blockingHandler(new TemplateService(vertx));
+
+    //若想要或body的参数[含表单的form-data和json格式]需要添加,可选
+    router.route().handler(BodyHandler.create());//支持文件上传的目录,ctrl + p 查看
+    //************************只能写在最后面,否则路由会访问不到,可能会导致出现 Internal Server Error ************************/
+    ToolLambda.getConfig(retriever).onSuccess(config ->{
+      final Integer port = config.getInteger("appPort");
+      //第三步,将router和 HttpServer 绑定[若是使用配置文件则这样实例化,如果不配置文件则把它挪动到lambda外边即可]
+      server.requestHandler(router).listen(port,http -> {
+        if (http.succeeded()){
+          //startPromise.complete();
+          logger.info("---应用启动成功---,http://127.0.0.1:"+port);
+        } else {
+          //startPromise.fail(http.cause());
+          logger.error("Launcher应用启动失败,"+http.cause());
+        }
+      });
+    }).onFailure(throwable->{
+      logger.error("Launcher读取配置文件失败,"+throwable.getMessage());
+    });
   }
 }
