@@ -70,11 +70,12 @@
       <artifactId>mssql-jdbc</artifactId>
       <version>6.4.0.jre8</version>
     </dependency>
-    <!--thymeleaf开始-->
+    <!--thymeleaf开始,它依赖slf4j,否则报错???-->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web-templ-thymeleaf</artifactId>
     </dependency>
+    <!--slf4j日志-->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
