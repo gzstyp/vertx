@@ -33,7 +33,7 @@ public final class TemplateService implements Handler<RoutingContext>{
       if(bufferAsyncResult.succeeded()){
         context.response().putHeader("content-type","text/html;charset=utf-8").end(bufferAsyncResult.result());
       } else {
-        ToolClient.responseSucceed(context,"加载页面失败");
+        ToolClient.responseFailure(context,"加载页面失败");
       }
     });
   }
