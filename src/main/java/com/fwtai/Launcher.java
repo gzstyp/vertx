@@ -73,7 +73,7 @@ public class Launcher extends AbstractVerticle {
     // 处理静态资源,整合静态资源文件,前端无需写webroot目录,因为默认就是 webroot 目录下的文件,因为加了‘/static’所以在访问时需要添加前缀 /static/xx.xx
     router.route("/static/*").handler(StaticHandler.create());// http://192.168.3.108/static/robots.txt
     // 若是不加 ‘/static’也就是 /* 在访问是无需添加前缀,即 /favicon.ico 就可以访问图标 ,当然两个也可以同时写!!!,但是不推荐,会增加服务器压力???
-    // router.route("/*").handler(StaticHandler.create()); //ok
+    // router.route("/*").handler(StaticHandler.create()); //ok,访问方式 /favicon.ico
 
     //二级路由开始
     final Router productApi = Router.router(vertx);
