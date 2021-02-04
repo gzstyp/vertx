@@ -201,6 +201,13 @@ public class Launcher extends AbstractVerticle {
     // 前端模版引擎用法,http://127.0.0.1/thymeleaf2
     router.route("/thymeleaf2").blockingHandler(new TemplateService(vertx));
 
+    //全局异常处理,放在最后一个route
+    router.route().last().blockingHandler(context -> {
+      ToolClient.responseJson(context,ToolClient.createJson(199,"访问的url不存在"));
+    }).failureHandler(context -> {
+      ToolClient.responseJson(context,ToolClient.createJson(199,"操作失败,系统出现错误"));
+    });
+
     //************************只能写在最后面,否则路由会访问不到,可能会导致出现 Internal Server Error ************************/
     ToolLambda.getConfig(retriever).onSuccess(config ->{
       final Integer port = config.getInteger("appPort");
