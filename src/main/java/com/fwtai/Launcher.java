@@ -18,6 +18,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.StaticHandler;
@@ -224,5 +225,10 @@ public class Launcher extends AbstractVerticle {
     }).onFailure(throwable->{
       logger.error("Launcher读取配置文件失败,"+throwable.getMessage());
     });
+  }
+
+  //封装了重定向,调用方式:blockingHandler(this::redirect)或handler(this::redirect);
+  protected void redirect(final RoutingContext context){
+    context.response().setStatusCode(302).putHeader("Location","http://www.yinlz.com").end();
   }
 }
