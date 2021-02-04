@@ -174,12 +174,12 @@ public class Launcher extends AbstractVerticle {
       ToolClient.responseSucceed(context,"/api/v.1.0/user 请求方式成功" + query);
     });
 
-    // 重定向302, http://127.0.0.1/redirect
+    // 重定向302,应用场景不同, http://127.0.0.1/redirect
     router.get("/redirect").blockingHandler(context->{
       context.response().setStatusCode(302).putHeader("Location","http://www.yinlz.com").end();
     });
 
-    //退出-重定向,http://127.0.0.1/logout
+    //退出-重定向,应用场景不同,http://127.0.0.1/logout
     router.get("/logout").handler(context -> {
       context.clearUser();
       context.response().setStatusCode(302).putHeader("Location","/").end();
