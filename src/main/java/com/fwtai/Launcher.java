@@ -203,9 +203,9 @@ public class Launcher extends AbstractVerticle {
 
     //全局异常处理,放在最后一个route
     router.route().last().blockingHandler(context -> {
-      ToolClient.responseJson(context,ToolClient.createJson(199,"访问的url不存在"));
+      ToolClient.responseJson(context,ToolClient.createJson(404,"访问的url不存在"));
     }).failureHandler(context -> {
-      ToolClient.responseJson(context,ToolClient.createJson(199,"操作失败,系统出现错误"));
+      ToolClient.responseJson(context,ToolClient.createJson(204,"操作失败,系统出现错误"));
     });
 
     //************************只能写在最后面,否则路由会访问不到,可能会导致出现 Internal Server Error ************************/
