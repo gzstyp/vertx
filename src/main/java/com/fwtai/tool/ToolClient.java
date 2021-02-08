@@ -150,6 +150,22 @@ public final class ToolClient{
     return null;
   }
 
+  /**验证请求参数是否完整,先调用 getParams() 再调用本方法*/
+  public static String validateField(final HashMap<String,String> params,final String... fields){
+    boolean bl = false;
+    if(params == null || params.isEmpty()) return ToolClient.jsonParams();
+    for(int x = 0; x < fields.length; x++){
+      final String key = fields[x];
+      final String value = params.get(key);
+      if(value == null || value.isEmpty()){
+        bl = true;
+        break;
+      }
+    }
+    if(bl) return ToolClient.jsonParams();
+    return null;
+  }
+
   /**获取表单请求参数*/
   public static HashMap<String,String> getParams(final RoutingContext context){
     final HashMap<String,String> result = new HashMap<>();
