@@ -5,6 +5,7 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -147,5 +148,19 @@ public final class ToolClient{
     }
     if(bl) return ToolClient.jsonParams();
     return null;
+  }
+
+  /**获取表单请求参数*/
+  public static HashMap<String,String> getParams(final RoutingContext context){
+    final HashMap<String,String> result = new HashMap<>();
+    final List<Map.Entry<String,String>> list = context.queryParams().entries();
+    for(int i = 0; i < list.size(); i++){
+      final Map.Entry<String,String> entry = list.get(i);
+      final String value = entry.getValue();
+      if(value != null && !value.isEmpty()){
+        result.put(entry.getKey(),entry.getValue());
+      }
+    }
+    return result;
   }
 }
