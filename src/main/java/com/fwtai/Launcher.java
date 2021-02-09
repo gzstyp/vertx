@@ -209,6 +209,16 @@ public class Launcher extends AbstractVerticle {
       ToolClient.responseJson(context,ToolClient.createJson(204,"操作失败,系统出现错误"));
     });
 
+    //获取请求头,获取token
+    router.route("/header").handler(context ->{
+      final String accessToken = context.request().getHeader("accessToken");
+      if("myToken".equals(accessToken)){
+        context.next();//继续
+      }else{
+        ToolClient.responseJson(context,ToolClient.jsonPermission());
+      }
+    });
+
     //************************只能写在最后面,否则路由会访问不到,可能会导致出现 Internal Server Error ************************/
     ToolLambda.getConfig(retriever).onSuccess(config ->{
       final Integer port = config.getInteger("appPort");
