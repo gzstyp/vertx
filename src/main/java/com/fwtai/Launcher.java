@@ -210,7 +210,7 @@ public class Launcher extends AbstractVerticle {
     });
 
     //获取请求头,获取token
-    router.route("/header").handler(context ->{
+    router.route().handler(context ->{
       final String accessToken = context.request().getHeader("accessToken");
       if("myToken".equals(accessToken)){
         context.next();//继续
