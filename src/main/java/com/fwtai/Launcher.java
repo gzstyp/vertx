@@ -78,7 +78,7 @@ public class Launcher extends AbstractVerticle {
     // router.route("/*").handler(StaticHandler.create()); //ok,访问方式 /favicon.ico
 
     //若有表单提交数据,此项必须,若想要或body的参数[含表单的form-data和json格式]需要添加,此处只能用 handler,不能使用 blockingHandler,否则会报Internal Server Error错!!!
-    router.route().handler(BodyHandler.create());//支持文件上传的目录,ctrl + p 查看
+    router.route().handler(BodyHandler.create());//支持文件上传的目录,ctrl + p 查看,BodyHandler.create()支持文件上传
 
     //二级路由开始
     final Router productApi = Router.router(vertx);
