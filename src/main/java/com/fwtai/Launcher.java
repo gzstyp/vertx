@@ -69,7 +69,7 @@ public class Launcher extends AbstractVerticle {
     methods.add(HttpMethod.GET);
     methods.add(HttpMethod.POST);
 
-    //router.route().handler(CorsHandler.create("vertx\\.io").allowedMethods(methods));支持正则表达式,此处只能用 handler,不能使用 blockingHandler,否则会报Internal Server Error错!!!
+    //router.route().handler(CorsHandler.create("vertx\\.io").allowedMethods(methods));支持 "*.fwtai.com" ;支持正则表达式,此处只能用 handler,不能使用 blockingHandler,否则会报Internal Server Error错!!!
     router.route().handler(CorsHandler.create("http://192.168.3.108").allowCredentials(true).allowedHeader("content-type").maxAgeSeconds(86400).allowedMethods(methods));
 
     // 处理静态资源,整合静态资源文件,前端无需写webroot目录,因为默认就是 webroot 目录下的文件,因为加了‘/static’所以在访问时需要添加前缀 /static/xx.xx
