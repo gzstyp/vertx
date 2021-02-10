@@ -80,6 +80,16 @@ public class Launcher extends AbstractVerticle {
     //若有表单提交数据,此项必须,若想要或body的参数[含表单的form-data和json格式]需要添加,此处只能用 handler,不能使用 blockingHandler,否则会报Internal Server Error错!!!
     router.route().handler(BodyHandler.create());//支持文件上传的目录,ctrl + p 查看,BodyHandler.create()支持文件上传
 
+    /*
+    final SessionStore session1 = LocalSessionStore.create(vertx);//ok,当然也可以使用下面的方式创建!!!
+    final SessionStore session2 = ClusteredSessionStore.create(vertx);//ok
+    router.route().handler(LoggerHandler.create());
+    //Session
+    router.route().handler(SessionHandler.create(session1));// BodyHandler.create(),支持文件上传!!!
+    router.route().handler(CorsHandler.create("127.0.0.1"));
+    router.route().handler(CSRFHandler.create("secret1"));//低版本只有1个参数，高版本有2个参数
+    */
+
     //二级路由开始
     final Router productApi = Router.router(vertx);
     //访问方式: http://192.168.3.108/product/add/1024
