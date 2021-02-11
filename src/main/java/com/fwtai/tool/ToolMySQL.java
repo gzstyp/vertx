@@ -51,8 +51,8 @@ public final class ToolMySQL{
           .setCharset(config.getString("charset"))
           .setSsl(config.getBoolean("ssl"));
         //配置数据库连接池
-        final PoolOptions pool = new PoolOptions().setMaxSize(config.getInteger("maxSize",16));
-        client = MySQLPool.pool(vertx,connectOptions,pool);
+        final PoolOptions opts = new PoolOptions().setMaxSize(config.getInteger("maxSize",16));
+        client = MySQLPool.pool(vertx,connectOptions,opts);
       } else {
         logger.error("ToolMySQL读取配置文件失败,"+ar.cause());
       }
