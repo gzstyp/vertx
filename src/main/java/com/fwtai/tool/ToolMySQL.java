@@ -99,7 +99,7 @@ public final class ToolMySQL{
         conn.preparedQuery(sql).execute(Tuple.wrap(params),rows ->{
           conn.close();//推荐写在第1行,防止忘记释放资源
           if(rows.succeeded()){
-            final ArrayList<JsonObject> list = new ArrayList<>();//如果慢的话,是否可以考虑 ArrayList<JsonObject> 直接换成 JsonArray
+            final ArrayList<JsonObject> list = new ArrayList<>();//todo 如果慢的话,是否可以考虑 ArrayList<JsonObject> 直接换成 JsonArray
             final RowSet<Row> rowSet = rows.result();
             final List<String> columns = rowSet.columnsNames();
             rowSet.forEach((item) ->{
