@@ -179,4 +179,18 @@ public final class ToolClient{
     }
     return result;
   }
+
+  /**获取表单请求参数*/
+  public static JsonObject getParamsJson(final RoutingContext context){
+    final JsonObject result = new JsonObject();
+    final List<Map.Entry<String,String>> list = context.queryParams().entries();
+    for(int i = 0; i < list.size(); i++){
+      final Map.Entry<String,String> entry = list.get(i);
+      final String value = entry.getValue();
+      if(value != null && !value.isEmpty()){
+        result.put(entry.getKey(),entry.getValue());
+      }
+    }
+    return result;
+  }
 }
