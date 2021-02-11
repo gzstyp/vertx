@@ -21,6 +21,8 @@
     解决：在打包部署前删除依赖jar包的 META-INF的 MSFTSIG.SF文件
 
     本项目功能有 日志|读取配置文件|静态资源的访问|链式调用|用户和密码认证+token认证|授权
+
+    可以查看本项目的目录下的项目 vertx05-final 示例代码,异步+消息驱动
   </description>
 
   <properties>
