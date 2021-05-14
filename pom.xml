@@ -23,6 +23,9 @@
     本项目功能有 日志|读取配置文件|静态资源的访问|链式调用|用户和密码认证+token认证|授权
 
     可以查看本项目的目录下的项目 vertx05-final 示例代码,异步+消息驱动
+
+    Vert.x(vertx) 认证和授权详解（包含认证和授权在Web系统中的使用）
+    https://blog.csdn.net/king_kgh/article/details/85218454
   </description>
 
   <properties>

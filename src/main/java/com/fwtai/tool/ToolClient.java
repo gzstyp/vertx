@@ -146,14 +146,14 @@ public final class ToolClient{
         break;
       }
     }
-    if(bl) return ToolClient.jsonParams();
+    if(bl) return jsonParams();
     return null;
   }
 
   /**验证请求参数是否完整,先调用 getParams() 再调用本方法*/
   public static String validateField(final HashMap<String,String> params,final String... fields){
     boolean bl = false;
-    if(params == null || params.isEmpty()) return ToolClient.jsonParams();
+    if(params == null || params.isEmpty()) return jsonParams();
     for(int x = 0; x < fields.length; x++){
       final String key = fields[x];
       final String value = params.get(key);
@@ -162,7 +162,7 @@ public final class ToolClient{
         break;
       }
     }
-    if(bl) return ToolClient.jsonParams();
+    if(bl) return jsonParams();
     return null;
   }
 
