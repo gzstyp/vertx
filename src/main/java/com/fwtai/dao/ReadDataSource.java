@@ -1,5 +1,6 @@
 package com.fwtai.dao;
 
+import com.fwtai.callback.ExecuteResult;
 import com.fwtai.config.ConfigFiles;
 import com.fwtai.tool.ToolClient;
 import io.netty.util.internal.logging.InternalLogger;
@@ -167,6 +168,32 @@ public final class ReadDataSource{
             logger.error("queryMap()出现异常,连接数据库失败:"+sql);
             final String json = ToolClient.createJson(199,"连接数据库失败");
             ToolClient.responseJson(context,json);
+          }
+        });
+      }
+    });
+  }
+
+  public final void queryMap(final String sql,final List<Object> params,final ExecuteResult executeResult){
+    getPool().getConnection((result) ->{
+      if(result.succeeded()){
+        final SqlConnection conn = result.result();
+        conn.preparedQuery(sql).execute(Tuple.wrap(params),rows ->{
+          conn.close();//推荐写在第1行,防止忘记释放资源
+          if(rows.succeeded()){
+            final JsonObject jsonObject = new JsonObject();
+            final RowSet<Row> rowSet = rows.result();
+            System.out.println(rowSet);
+            final List<String> columns = rowSet.columnsNames();
+            rowSet.forEach((item) ->{
+              for(int i = 0; i < columns.size();i++){
+                final String column = columns.get(i);
+                jsonObject.put(column,item.getValue(column));
+              }
+            });
+            executeResult.succeed(jsonObject);
+          }else{
+            executeResult.failure(rows.cause());
           }
         });
       }
