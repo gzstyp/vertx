@@ -97,6 +97,7 @@
       <artifactId>vertx-auth-jwt</artifactId>
     </dependency>
     <!--认证结束-->
+    <!--todo 注意这个用不到,因为vertx自身实现了异步驱动-->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
