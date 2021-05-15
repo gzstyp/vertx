@@ -1,6 +1,7 @@
 package com.fwtai.dao;
 
-import com.fwtai.callback.ExecuteResult;
+import com.fwtai.callback.QueryResultList;
+import com.fwtai.callback.QueryResultMap;
 import com.fwtai.config.ConfigFiles;
 import com.fwtai.tool.ToolClient;
 import io.netty.util.internal.logging.InternalLogger;
@@ -56,8 +57,8 @@ public final class ReadDataSource{
     }
   }
 
-  //无参数 new ToolMySQL(vertx).queryList();
-  public final void queryList(final RoutingContext context,final String sql){
+  //不推荐无参数 new ToolMySQL(vertx).queryList();
+  private final void queryList(final RoutingContext context,final String sql){
     getPool().getConnection((result) ->{
       if(result.succeeded()){
         final SqlConnection conn = result.result();
@@ -88,7 +89,7 @@ public final class ReadDataSource{
     });
   }
 
-  //有参数 new ToolMySQL(vertx).queryList();
+  //todo 推荐,有参数 new ToolMySQL(vertx).queryList();若没有参数的话,要创建 new ArrayList<Object>(1) 作为第3个参数
   public final void queryList(final RoutingContext context,final String sql,final List<Object> params){
     getPool().getConnection((result) ->{
       if(result.succeeded()){
@@ -114,6 +115,35 @@ public final class ReadDataSource{
             //操作数据库失败
             final String json = ToolClient.createJson(199,"连接数据库失败");
             ToolClient.responseJson(context,json);
+          }
+        });
+      }
+    });
+  }
+
+  //若没有参数的话,要创建 new ArrayList<Object>(1) 作为第2个参数参数
+  public final void queryList(final String sql,final List<Object> params,final QueryResultList resultList){
+    getPool().getConnection((result) ->{
+      if(result.succeeded()){
+        final SqlConnection conn = result.result();
+        conn.preparedQuery(sql).execute(Tuple.wrap(params),rows ->{
+          conn.close();//推荐写在第1行,防止忘记释放资源
+          if(rows.succeeded()){
+            final ArrayList<JsonObject> list = new ArrayList<>();
+            final RowSet<Row> rowSet = rows.result();
+            final List<String> columns = rowSet.columnsNames();
+            rowSet.forEach((item) ->{
+              final JsonObject jsonObject = new JsonObject();
+              for(int i = 0; i < columns.size(); i++){
+                final String column = columns.get(i);
+                jsonObject.put(column,item.getValue(column));
+              }
+              list.add(jsonObject);
+            });
+            //操作数据库成功
+            resultList.succeed(list);
+          }else{
+            resultList.failure(rows.cause());
           }
         });
       }
@@ -174,7 +204,7 @@ public final class ReadDataSource{
     });
   }
 
-  public final void queryMap(final String sql,final List<Object> params,final ExecuteResult executeResult){
+  public final void queryMap(final String sql,final List<Object> params,final QueryResultMap resultMap){
     getPool().getConnection((result) ->{
       if(result.succeeded()){
         final SqlConnection conn = result.result();
@@ -191,9 +221,9 @@ public final class ReadDataSource{
                 jsonObject.put(column,item.getValue(column));
               }
             });
-            executeResult.succeed(jsonObject);
+            resultMap.succeed(jsonObject);
           }else{
-            executeResult.failure(rows.cause());
+            resultMap.failure(rows.cause());
           }
         });
       }

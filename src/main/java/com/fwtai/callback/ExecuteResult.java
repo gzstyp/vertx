@@ -1,9 +1,7 @@
 package com.fwtai.callback;
 
-import io.vertx.core.json.JsonObject;
-
 public interface ExecuteResult{
 
-  public void succeed(final JsonObject jsonObject);
+  public void success(final int rows);
   public void failure(final Throwable throwable);
 }

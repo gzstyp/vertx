@@ -1,5 +1,6 @@
 package com.fwtai.dao;
 
+import com.fwtai.callback.ExecuteResult;
 import com.fwtai.tool.ToolClient;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.Log4JLoggerFactory;
@@ -96,5 +97,24 @@ public final class DBWrite{
     }else{
       ToolClient.responseJson(context,ToolClient.jsonFailure());
     }
+  }
+
+  //todo 若没有参数的话,要创建 new ArrayList<Object>(1) 作为第2个参数
+  protected void executeSQL(final String sql,final List<Object> params,final ExecuteResult executeResult){
+    client.getConnection((result) -> {
+      if(result.succeeded()){
+        final SqlConnection conn = result.result();
+        conn.preparedQuery(sql).execute(Tuple.wrap(params),rows -> {
+          conn.close();//推荐写在第1行,防止忘记释放资源
+          if(rows.succeeded()){
+            final RowSet<Row> rowSet = rows.result();
+            final int count = rowSet.rowCount();
+            executeResult.success(count);
+          }else{
+            executeResult.failure(rows.cause());
+          }
+        });
+      }
+    });
   }
 }
