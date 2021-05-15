@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 异步处理方式;区别在于 router.get("/sync").handler 和 router.get("/async").blockingHandler,即同步是 handler;异步是 blockingHandler
+ * 异步处理方式;区别在于 router.get("/sync").handler 和 router.get("/async").blockingHandler,即异步是 handler;同步(阻塞)是 blockingHandler
+ * @注意 需要处理异常报错
  * @作者 田应平
  * @版本 v1.0
  * @创建时间 2020年9月17日 13:27:41
@@ -93,31 +94,31 @@ public class Launcher extends AbstractVerticle {
     //二级路由开始
     final Router productApi = Router.router(vertx);
     //访问方式: http://192.168.3.108/product/add/1024
-    productApi.get("/add/:kid").blockingHandler(context -> {
+    productApi.get("/add/:kid").handler(context -> {
       final String kid = context.request().getParam("kid");
       ToolClient.responseSucceed(context,kid+",二级路由请求成功-add方法");
     });
     //访问方式: http://192.168.3.108/product/edit/1024
-    productApi.get("/edit/:kid").blockingHandler(context -> {
+    productApi.get("/edit/:kid").handler(context -> {
       final String kid = context.request().getParam("kid");
       ToolClient.responseSucceed(context,kid+",二级路由请求成功-edit方法");
     });
     //访问方式: http://192.168.3.108/product/list/10/1
-    productApi.get("/list/:size/:page").blockingHandler(new ProductHandle(vertx));
+    productApi.get("/list/:size/:page").handler(new ProductHandle(vertx));
     router.mountSubRouter("/product",productApi);
     //二级路由结束
 
     //第四步,配置Router解析url
-    router.get("/").blockingHandler(context -> {
+    router.get("/").handler(context -> {
       ToolClient.responseJson(context,ToolClient.jsonSucceed());
     });
 
-    router.route("/login").order(1).blockingHandler(context -> {
+    router.route("/login").order(1).handler(context -> {
       ToolClient.responseJson(context,ToolClient.jsonSucceed("登录成功!"));
     });
 
     // http://192.168.3.108/register?username=txh&password=000000
-    router.get("/register").blockingHandler((context) -> {
+    router.get("/register").handler((context) -> {
       final String username = context.request().getParam("username");
       final String password = context.request().getParam("password");
       final String sql = "INSERT INTO sys_user(username,`password`) VALUES (?,?)";
@@ -128,7 +129,7 @@ public class Launcher extends AbstractVerticle {
     });
 
     //获取url参数,经典模式,即url的参数 http://192.168.3.108/url?page=1&size=10
-    router.route("/url").blockingHandler(context -> {
+    router.route("/url").handler(context -> {
       final String page = context.request().getParam("page");
       final String size = context.request().getParam("size");
       final List<Object> params = new ArrayList<>();
@@ -141,52 +142,52 @@ public class Launcher extends AbstractVerticle {
     });
 
     // http://192.168.3.108/rest/1
-    router.route("/rest/:kid").blockingHandler(new UserService(toolMySQL));
+    router.route("/rest/:kid").handler(new UserService(toolMySQL));
 
     //获取url参数,restful模式,用:和url上的/对应的绑定,它和vue的:Xxx="Yy"同样的意思,注意顺序! http://192.168.3.108/restful/10/30
-    router.route("/restful/:page/:size").blockingHandler(context -> {
+    router.route("/restful/:page/:size").handler(context -> {
       final String page = context.request().getParam("page");
       final String size = context.request().getParam("size");
       ToolClient.responseJson(context,ToolClient.jsonSucceed(page+",获取url参数,restful模式,"+size));
     });
 
     //获取body参数-->表单 multipart/form-data 格式,即请求头的 "Content-Type","application/x-www-form-urlencoded"
-    router.route("/form").blockingHandler(context -> {
+    router.route("/form").handler(context -> {
       final String page = context.request().getFormAttribute("page");
       final String param = context.request().getParam("page");
       ToolClient.responseJson(context,ToolClient.jsonSucceed(param + ",获取body参数-->表单form-data格式," + page));
     });
 
     //获取body参数-->json格式,即请求头的 "Content-Type","application/json"
-    router.route("/json").blockingHandler(context -> {
+    router.route("/json").handler(context -> {
       final JsonObject page = context.getBodyAsJson();
       final String json = ToolClient.createJson(200,page.toString() + "获取body参数-->json格式,"+page.encode()+",解析:"+page.getValue("page"));
       ToolClient.responseJson(context,json);
     });
 
     // http://127.0.0.1/controller
-    router.route("/controller").blockingHandler(new IndexHandle());
+    router.route("/controller").handler(new IndexHandle());
 
     // http://127.0.0.1/client
-    router.route("/client").blockingHandler(new UrlHandle(vertx));
+    router.route("/client").handler(new UrlHandle(vertx));
 
     // http://127.0.0.1/api/sqlServer?route=map|list
-    router.route("/api/sqlServer").blockingHandler(new SqlServerHandle(vertx));
+    router.route("/api/sqlServer").handler(new SqlServerHandle(vertx));
 
     /*通配符*/ // http://127.0.0.1/api/v.1.0/role/1
-    router.get("/api/v.1.0/role/*").blockingHandler(context->{
+    router.get("/api/v.1.0/role/*").handler(context->{
       final String query = context.request().query();
       ToolClient.responseSucceed(context,"/api/v.1.0/role/* 通配符请求方式成功" + query);
     });
 
     // http://127.0.0.1/api/v.1.0/user?type=1
-    router.get("/api/v.1.0/user").blockingHandler(context->{
+    router.get("/api/v.1.0/user").handler(context->{
       final String query = context.request().query();//query的值是 type=1
       ToolClient.responseSucceed(context,"/api/v.1.0/user 请求方式成功" + query);
     });
 
     // 重定向302,应用场景不同, http://127.0.0.1/redirect
-    router.get("/redirect").blockingHandler(context->{
+    router.get("/redirect").handler(context->{
       context.response().setStatusCode(302).putHeader("Location","http://www.yinlz.com").end();
     });
 
@@ -197,7 +198,7 @@ public class Launcher extends AbstractVerticle {
     });
 
     // 前端模版引擎用法,http://127.0.0.1/thymeleaf
-    router.route("/thymeleaf").blockingHandler(context->{
+    router.route("/thymeleaf").handler(context->{
       final JsonObject json = new JsonObject();
       json.put("name","田应平,从后端返回数据");
       thymeleaf.render(json,"templates/index.html",bufferAsyncResult ->{
@@ -210,10 +211,10 @@ public class Launcher extends AbstractVerticle {
     });
 
     // 前端模版引擎用法,http://127.0.0.1/thymeleaf2
-    router.route("/thymeleaf2").blockingHandler(new TemplateService(vertx));
+    router.route("/thymeleaf2").handler(new TemplateService(vertx));
 
     //全局异常处理,放在最后一个route
-    router.route().last().blockingHandler(context -> {
+    router.route().last().handler(context -> {
       ToolClient.responseJson(context,ToolClient.createJson(404,"访问的url不存在"));
     }).failureHandler(context -> {
       ToolClient.responseJson(context,ToolClient.createJson(204,"操作失败,系统出现错误"));
