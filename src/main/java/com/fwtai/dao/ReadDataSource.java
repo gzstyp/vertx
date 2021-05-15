@@ -204,6 +204,7 @@ public final class ReadDataSource{
     });
   }
 
+  //若没有参数的话,要创建 new ArrayList<Object>(1) 作为第2个参数参数
   public final void queryMap(final String sql,final List<Object> params,final QueryResultMap resultMap){
     getPool().getConnection((result) ->{
       if(result.succeeded()){
