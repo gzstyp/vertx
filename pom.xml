@@ -15,7 +15,7 @@
     部署阶段:
     右键运行 Maven的package生成含-fat.jar,运行即可,即 java -jar vertx-v1.0.0-fat.jar
 
-    一直在转圈圈说明没有返回值
+    浏览器一直在转圈圈说明没有返回值
 
     解决java.lang.SecurityException: Invalid signature file digest for Manifest main attributes
     当项目依赖其他jar包的时候，打出的jar包执行出错，抛出这个异常。
@@ -28,6 +28,21 @@
 
     Vert.x(vertx) 认证和授权详解（包含认证和授权在Web系统中的使用）
     https://blog.csdn.net/king_kgh/article/details/85218454
+
+    博主使用的是vertx-hazelcast来做集群，每个服务是一个verticle。
+    服务之间调用使用service-proxy，谈下博主为什么使用service-proxy，
+    因为使用他，比较符合我们现在使用微服务的方式。A服务提供一个sdk,sdk包含传参，入参，接口的访问。
+    其他service-proxy的底层是vertx提供的注解，生成了代理类，底层还是使用eventBus来进行服务通信，
+    eventBus在vertx-hazelcast集群环境下，他能获取到每个服务的实例并且进行通信。
+    当我们应用使用vertx-hazelcast的情况下，我们不在需要单独去做服务发现，缓存，分布式锁，分布式map，分布式计数等等操作。
+    关于hazelcast这个可以大家去百度，他的性能目前比redis还要高一个量级。配置中心，可以使用consul.
+
+    博主目前的简单结构如下
+    web–调用–server----调用db层—每个应用启动都调用–config配置服务。
+    这样的话，新增的服务，只需要关心业务，不需要去关心其他与自己无关的第三方应用。
+    比如明显感觉数据库的服务并发支撑不够，那就多起几个db服务。
+    当然，数据库的处理能力，也要强才行，个人比较建议使用mycat等类似的数据库代理中间件。
+    这样开发比较简单。后面，博主会找时间去b站做视频，讲到博主目前使用vertx的方式，与过程中，遇到的问题。
   </description>
 
   <properties>
