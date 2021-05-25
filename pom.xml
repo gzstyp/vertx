@@ -43,6 +43,9 @@
     比如明显感觉数据库的服务并发支撑不够，那就多起几个db服务。
     当然，数据库的处理能力，也要强才行，个人比较建议使用mycat等类似的数据库代理中间件。
     这样开发比较简单。后面，博主会找时间去b站做视频，讲到博主目前使用vertx的方式，与过程中，遇到的问题。
+
+    集群
+    https://blog.csdn.net/feinifi/article/details/55007319
   </description>
 
   <properties>

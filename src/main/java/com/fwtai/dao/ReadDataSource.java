@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @QQ号码 444141300
  * @Email service@dwlai.com
  * @官网 http://www.fwtai.com
- */
+*/
 public final class ReadDataSource{
 
   final InternalLogger logger = Log4JLoggerFactory.getInstance(getClass());
@@ -121,7 +121,7 @@ public final class ReadDataSource{
     });
   }
 
-  //若没有参数的话,要创建 new ArrayList<Object>(1) 作为第2个参数参数
+  //todo 推荐,若没有参数的话,要创建 new ArrayList<Object>(1) 作为第2个参数参数
   public final void queryList(final String sql,final List<Object> params,final QueryResultList resultList){
     getPool().getConnection((result) ->{
       if(result.succeeded()){
@@ -177,6 +177,7 @@ public final class ReadDataSource{
     });
   }
 
+  //不推荐使用,请使用上面的方法
   public final void queryMap(final RoutingContext context,final String sql,final List<Object> params){
     getPool().getConnection((result) ->{
       if(result.succeeded()){
@@ -242,6 +243,7 @@ public final class ReadDataSource{
     }
   }
 
+  //不推荐使用,请使用上面的方法
   protected final void queryHashMap(final RoutingContext context,final String sql,final List<Object> params){
     getCon().compose(connection -> getRows(connection,sql,params)).onSuccess(rowSet ->{
       final List<String> columns = rowSet.columnsNames();
@@ -259,6 +261,7 @@ public final class ReadDataSource{
     });
   }
 
+  //不推荐使用,请使用上面的方法
   protected final void queryListData(final RoutingContext context,final String sql,final List<Object> params){
     getCon().compose(connection -> getRows(connection,sql,params)).onSuccess(rowSet ->{
       final List<String> columns = rowSet.columnsNames();
