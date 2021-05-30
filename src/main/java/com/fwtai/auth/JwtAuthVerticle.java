@@ -6,9 +6,9 @@ import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.PubSecKeyOptions;
+import io.vertx.ext.auth.User;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
-import io.vertx.ext.auth.jwt.impl.JWTUser;
 
 /**
  * 提供两种认证方式,一种是用户名和密码认证;一种是token认证
@@ -55,6 +55,7 @@ public class JwtAuthVerticle extends AbstractVerticle {
             final JsonObject data = new JsonObject().put("userId","admin");
             final String jsonData = jwtAuth.generateToken(data);
             ToolClient.getResponse(request).end(ToolClient.queryJson(jsonData));
+            return;
           } else {
             final String jsonFailure = ToolClient.jsonFailure("认证失败,用户名或密码错误");
             ToolClient.getResponse(request).end(jsonFailure);
@@ -64,7 +65,7 @@ public class JwtAuthVerticle extends AbstractVerticle {
         // 使用jwt进行认证
         jwtAuth.authenticate(new JsonObject().put("jwt",token), auth -> {
           if (auth.succeeded()) {
-            final JWTUser user = (JWTUser) auth.result();
+            final User user = auth.result();
             final JsonObject authData = user.principal();
             final String userId = authData.getString("userId");
             final String jsonSucceed = ToolClient.jsonSucceed("认证成功,用户名:"+userId);
@@ -78,7 +79,6 @@ public class JwtAuthVerticle extends AbstractVerticle {
     });
     server.listen(8080);
   }
-
 
   /**
    * 把URL后跟的查询字符串转成json对象
