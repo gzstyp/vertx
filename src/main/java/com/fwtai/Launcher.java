@@ -40,7 +40,7 @@ import java.util.Set;
  * @官网 http://www.fwtai.com
  * 使用vertx共享数据:https://www.cnblogs.com/endv/p/12814470.html
 */
-public class Launcher extends AbstractVerticle {
+public final class Launcher extends AbstractVerticle {
 
   final InternalLogger logger = Log4JLoggerFactory.getInstance(getClass());
 
