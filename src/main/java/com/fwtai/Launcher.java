@@ -108,7 +108,7 @@ public final class Launcher extends AbstractVerticle {
     router.mountSubRouter("/product",productApi);
     //二级路由结束
 
-    //第四步,配置Router解析url
+    //第三步,配置Router解析url
     router.get("/").handler(context -> {
       ToolClient.responseJson(context,ToolClient.jsonSucceed());
     });
@@ -233,7 +233,7 @@ public final class Launcher extends AbstractVerticle {
     //************************只能写在最后面,否则路由会访问不到,可能会导致出现 Internal Server Error ************************/
     ToolLambda.getConfig(retriever).onSuccess(config ->{
       final Integer port = config.getInteger("appPort");
-      //第三步,将router和 HttpServer 绑定[若是使用配置文件则这样实例化,如果不配置文件则把它挪动到lambda外边即可]
+      //第四步,将router和 HttpServer 绑定[若是使用配置文件则这样实例化,如果不配置文件则把它挪动到lambda外边即可]
       server.requestHandler(router).listen(port,http -> {
         if (http.succeeded()){
           startPromise.complete();
