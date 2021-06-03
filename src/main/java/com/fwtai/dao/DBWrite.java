@@ -4,6 +4,8 @@ import com.fwtai.callback.ExecuteResult;
 import com.fwtai.tool.ToolClient;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.Log4JLoggerFactory;
+import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.mysqlclient.MySQLConnectOptions;
@@ -116,5 +118,24 @@ public final class DBWrite{
         });
       }
     });
+  }
+
+  //用法,待验证,execute(sql,params).onSuccess(handler->{}).onFailure(throwable->{});
+  public final Future<RowSet<Row>> execute(final String sql,final List<Object> params){
+    final Promise<RowSet<Row>> promise = Promise.promise();
+    client.getConnection((result) ->{
+      if(result.succeeded()){
+        final SqlConnection conn = result.result();
+        conn.preparedQuery(sql).execute(Tuple.wrap(params),rows ->{
+          conn.close();//推荐写在第1行,防止忘记释放资源
+          if(rows.succeeded()){
+            promise.complete(rows.result());//重点,固定写法
+          }else{
+            promise.fail(rows.cause());//重点,固定写法
+          }
+        });
+      }
+    });
+    return promise.future();//重点,固定写法
   }
 }
