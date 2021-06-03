@@ -17,6 +17,28 @@
 
     浏览器一直在转圈圈说明没有返回值
 
+    ***********************↓这个好使↓***********************
+    定义:
+    public static Future《User》 authInfo(final Vertx vertx,final String token){
+      final Promise《User》 promise = Promise.promise();
+      getJwtAuth(vertx).authenticate(new JsonObject().put("token",token))
+        .onSuccess(promise::complete)
+        .onFailure(promise::fail);
+      return promise.future();
+    }
+    用法:
+    ToolJWT.authInfo(vertx,token).onSuccess(user -> {
+      context.response()
+        .putHeader("content-type","text/html;charset=utf-8")
+        .end(user.principal().encode());
+      }
+      ).onFailure(err->{
+        context.response()
+        .putHeader("content-type","text/html;charset=utf-8")
+        .end("无效的token");
+    });
+    ***********************↑这个好使↑***********************
+
     解决java.lang.SecurityException: Invalid signature file digest for Manifest main attributes
     当项目依赖其他jar包的时候，打出的jar包执行出错，抛出这个异常。
     原因：因为依赖jar包中的META-INF中有多余的.SF文件与当前jar包冲突
