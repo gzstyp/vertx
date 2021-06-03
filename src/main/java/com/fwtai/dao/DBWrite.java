@@ -99,7 +99,7 @@ public final class DBWrite{
     }
   }
 
-  //todo 若没有参数的话,要创建 new ArrayList<Object>(1) 作为第2个参数
+  //todo 若没有参数的话,要创建 new ArrayList<Object>(0) 作为第2个参数
   protected void executeSQL(final String sql,final List<Object> params,final ExecuteResult executeResult){
     client.getConnection((result) -> {
       if(result.succeeded()){

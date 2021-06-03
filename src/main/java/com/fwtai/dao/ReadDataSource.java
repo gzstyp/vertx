@@ -89,7 +89,7 @@ public final class ReadDataSource{
     });
   }
 
-  //todo 推荐,有参数 new ToolMySQL(vertx).queryList();若没有参数的话,要创建 new ArrayList<Object>(1) 作为第3个参数
+  //todo 推荐,有参数 new ToolMySQL(vertx).queryList();若没有参数的话,要创建 new ArrayList<Object>(0) 作为第3个参数
   public final void queryList(final RoutingContext context,final String sql,final List<Object> params){
     getPool().getConnection((result) ->{
       if(result.succeeded()){
@@ -121,7 +121,7 @@ public final class ReadDataSource{
     });
   }
 
-  //todo 推荐,若没有参数的话,要创建 new ArrayList<Object>(1) 作为第2个参数参数
+  //todo 推荐,若没有参数的话,要创建 new ArrayList<Object>(0) 作为第2个参数参数
   public final void queryList(final String sql,final List<Object> params,final QueryResultList resultList){
     getPool().getConnection((result) ->{
       if(result.succeeded()){
