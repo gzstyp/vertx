@@ -120,7 +120,7 @@ public final class DBWrite{
     });
   }
 
-  //用法,待验证,execute(sql,params).onSuccess(handler->{}).onFailure(throwable->{});
+  //todo 用法,待验证,execute(sql,params).onSuccess(handler->{}).onFailure(throwable->{});
   public final Future<RowSet<Row>> execute(final String sql,final List<Object> params){
     final Promise<RowSet<Row>> promise = Promise.promise();
     client.getConnection((result) ->{
