@@ -13,7 +13,7 @@ import io.vertx.sqlclient.PoolOptions;
  * @QQ号码 444141300
  * @Email service@dwlai.com
  * @官网 http://www.fwtai.com
- */
+*/
 public final class DBRead1{
 
   // 创建数据库连接池
