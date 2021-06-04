@@ -120,9 +120,9 @@ public final class DBWrite{
     });
   }
 
-  //todo 用法,client.execute(sql,params).onSuccess(handler->{}).onFailure(throwable->{});
+  //todo 用法,daoHandle.execute(sql,params).onSuccess(handler->{}).onFailure(throwable->{});
   /* 示例:
-    client.execute(sqlAdd,paramsAdd).onSuccess(rows->{
+    daoHandle.execute(sqlAdd,paramsAdd).onSuccess(rows->{
       final RowSet<Row> rowSet = rows.value();
       final int count = rowSet.rowCount();
       System.out.println("count->"+count);
