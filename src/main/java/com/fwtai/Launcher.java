@@ -248,7 +248,7 @@ public final class Launcher extends AbstractVerticle {
     });
   }
 
-  //封装了重定向,调用方式:blockingHandler(this::redirect)或handler(this::redirect);
+  //封装了重定向,调用方式:handler(this::redirect);
   protected void redirect(final RoutingContext context){
     context.response().setStatusCode(302).putHeader("Location","http://www.yinlz.com").end();
   }

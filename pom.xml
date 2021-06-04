@@ -70,6 +70,15 @@
     https://blog.csdn.net/feinifi/article/details/55007319
     中文文档
     https://vertx-china.gitee.io/
+
+    Vert.x开发响应式微服务之服务发现和断路器
+    https://www.jdon.com/soa/reactive-microservices-with-eclipse-vertx-2.html
+
+    https://blog.csdn.net/xiaoqiangyonghu/article/details/81331129
+
+    事务
+    https://blog.csdn.net/weixin_33696822/article/details/88112985
+
   </description>
 
   <properties>
