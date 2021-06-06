@@ -1,6 +1,8 @@
 package com.fwtai.tool;
 
 import io.vertx.config.ConfigRetriever;
+import io.vertx.config.ConfigRetrieverOptions;
+import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonObject;
@@ -33,6 +35,20 @@ public final class ToolLambda{
       }
     });
     return promise.future();//重点,固定写法
+  }
+
+  /**
+   * 获取配置文件的选项配置
+   * @param filePath 支持全路径或当前文件名
+   * @作者 田应平
+   * @QQ 444141300
+   * @创建时间 2021/6/6 13:09
+  */
+  public static ConfigRetrieverOptions getConfigRetriever(final String filePath){
+    final ConfigRetrieverOptions options = new ConfigRetrieverOptions();
+    final ConfigStoreOptions storeOptions = new ConfigStoreOptions();
+    storeOptions.setType("file").setConfig(new JsonObject().put("path",filePath));
+    return options.addStore(storeOptions);
   }
 
   // ①获取数据库连接,通过链式调用;异步+响应式的链式调用示例,有且只有包含 Handler + AsyncResult 才能封装成链式调用
