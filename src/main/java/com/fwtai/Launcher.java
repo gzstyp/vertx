@@ -260,7 +260,12 @@ public final class Launcher extends AbstractVerticle {
     });
 
     vertx.eventBus().consumer(address,message->{
-      System.out.println("message:"+message.body());
+      System.out.println("收到消息:"+message.body());//收到消息
+      final JsonObject reply = new JsonObject();
+      reply.put("msg","已收到消息");
+      reply.put("code",200);
+      reply.put("object",message.body());
+      message.reply(reply);//回复消息
     });
 
     vertx.setTimer(5000,handler->{
@@ -269,7 +274,14 @@ public final class Launcher extends AbstractVerticle {
   }
 
   protected void sendEvent(){
-    vertx.eventBus().send(address,"发送消息");
+    final JsonObject message = new JsonObject();
+    message.put("code",200);
+    message.put("msg","操作成功");
+    vertx.eventBus().request(address,message,reply->{//todo 重载方法
+      if(reply.succeeded()){
+        System.out.println("收到回复消息:"+reply.result().body());
+      }
+    });
   }
 
   //封装了重定向,调用方式:handler(this::redirect);
