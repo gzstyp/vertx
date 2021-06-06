@@ -47,6 +47,8 @@ public final class Launcher extends AbstractVerticle {
 
   final InternalLogger logger = Log4JLoggerFactory.getInstance(getClass());
 
+  private final String address = "com.fwtai.app.address";
+
   //第一步,声明router,如果有重复的 path 路由的话,它匹配顺序是从上往下的,仅会执行第一个.那如何更改顺序呢？可以通过 order(x)来更改顺序,值越小越先执行!
   private Router router;
 
@@ -256,6 +258,18 @@ public final class Launcher extends AbstractVerticle {
     }).onFailure(throwable->{
       logger.error("Launcher读取配置文件失败,"+throwable.getMessage());
     });
+
+    vertx.eventBus().consumer(address,message->{
+      System.out.println("message:"+message.body());
+    });
+
+    vertx.setTimer(5000,handler->{
+      sendEvent();
+    });
+  }
+
+  protected void sendEvent(){
+    vertx.eventBus().send(address,"发送消息");
   }
 
   //封装了重定向,调用方式:handler(this::redirect);
