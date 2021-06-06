@@ -150,7 +150,7 @@ public final class ToolClient{
     return null;
   }
 
-  /**验证请求参数是否完整,先调用 getParams() 再调用本方法*/
+  /**验证请求参数是否完整,必先调用 getParams(context,formField) 再调用本方法*/
   public static String validateField(final HashMap<String,String> params,final String... fields){
     boolean bl = false;
     if(params == null || params.isEmpty()) return jsonParams();
@@ -166,21 +166,22 @@ public final class ToolClient{
     return null;
   }
 
-  /**获取表单请求参数*/
-  public static HashMap<String,String> getParams(final RoutingContext context){
+  /**获取表单必填的请求参数*/
+  public static HashMap<String,String> getParams(final RoutingContext context,final String... formField){
     final HashMap<String,String> result = new HashMap<>();
-    final List<Map.Entry<String,String>> list = context.queryParams().entries();
-    for(int i = 0; i < list.size(); i++){
-      final Map.Entry<String,String> entry = list.get(i);
-      final String value = entry.getValue();
-      if(value != null && !value.isEmpty()){
-        result.put(entry.getKey(),entry.getValue());
-      }
+    final HttpServerRequest request = context.request();
+    for(int x = 0; x < formField.length;x++){
+      final String field = formField[x].trim();
+      if(field.length() == 1 && field.equals("_")) continue;
+      final String value = request.getParam(field);
+      if(value == null || value.trim().length() <= 0) continue;
+      if(value.length() == 1 && value.equals("_")) continue;
+      result.put(field,value);
     }
     return result;
   }
 
-  /**获取表单请求参数*/
+  /**仅支持get请求!获取表单请求参数*/
   public static JsonObject getParamsJson(final RoutingContext context){
     final JsonObject result = new JsonObject();
     final List<Map.Entry<String,String>> list = context.queryParams().entries();
