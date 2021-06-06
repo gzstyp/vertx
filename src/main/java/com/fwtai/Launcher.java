@@ -47,8 +47,6 @@ public final class Launcher extends AbstractVerticle {
 
   final InternalLogger logger = Log4JLoggerFactory.getInstance(getClass());
 
-  private final String address = "com.fwtai.app.address";
-
   //第一步,声明router,如果有重复的 path 路由的话,它匹配顺序是从上往下的,仅会执行第一个.那如何更改顺序呢？可以通过 order(x)来更改顺序,值越小越先执行!
   private Router router;
 
@@ -258,34 +256,10 @@ public final class Launcher extends AbstractVerticle {
     }).onFailure(throwable->{
       logger.error("Launcher读取配置文件失败,"+throwable.getMessage());
     });
-
-    vertx.eventBus().consumer(address,message->{
-      System.out.println("收到消息:"+message.body());//收到消息
-      final JsonObject reply = new JsonObject();
-      reply.put("msg","已收到消息");
-      reply.put("code",200);
-      reply.put("object",message.body());
-      message.reply(reply);//回复消息
-    });
-
-    vertx.setTimer(5000,handler->{
-      sendEvent();
-    });
-  }
-
-  protected void sendEvent(){
-    final JsonObject message = new JsonObject();
-    message.put("code",200);
-    message.put("msg","操作成功");
-    vertx.eventBus().request(address,message,reply->{//todo 重载方法
-      if(reply.succeeded()){
-        System.out.println("收到回复消息:"+reply.result().body());
-      }
-    });
   }
 
   //封装了重定向,调用方式:handler(this::redirect);
   protected void redirect(final RoutingContext context){
-    context.response().setStatusCode(302).putHeader("Location","http://www.yinlz.com").end();
+    context.response().setStatusCode(302).putHeader("Location","http://www.dwz.cloud").end();
   }
 }
