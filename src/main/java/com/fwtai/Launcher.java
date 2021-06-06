@@ -110,6 +110,9 @@ public final class Launcher extends AbstractVerticle {
 
     //第三步,配置Router解析url
     router.get("/").handler(context -> {
+      logger.info("操作成功");
+      logger.error("error,仅把error信息写入到日志文档!");
+      logger.debug("debug!");
       ToolClient.responseJson(context,ToolClient.jsonSucceed());
     });
 
