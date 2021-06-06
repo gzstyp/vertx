@@ -57,7 +57,7 @@ public final class Launcher extends AbstractVerticle {
   @Override
   public void start(final Promise<Void> startPromise) throws Exception {
 
-    final ConfigRetriever retriever = ConfigRetriever.create(vertx);//实例化配置文件,配置文件默认的路径 resources/config.json
+    final ConfigRetriever retriever = ConfigRetriever.create(vertx);//实例化配置文件,配置文件默认的路径 resources/config.json;当然也可以把配置文件config.json放在jar文件同一个目录
 
     toolMySQL = new ToolMySQL(vertx,retriever);
 
