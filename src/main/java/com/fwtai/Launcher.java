@@ -16,6 +16,8 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.http.HttpVersion;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -25,6 +27,7 @@ import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,14 +57,18 @@ public final class Launcher extends AbstractVerticle {
   @Override
   public void start(final Promise<Void> startPromise) throws Exception {
 
-    final ConfigRetriever retriever = ConfigRetriever.create(vertx);//实例化配置文件,全局,配置文件默认的路径 resources/conf/config.json
+    final ConfigRetriever retriever = ConfigRetriever.create(vertx);//实例化配置文件,全局,配置文件默认的路径 resources/conf/config.json,非默认路径请看步移项目vertx-noise
 
     toolMySQL = new ToolMySQL(vertx,retriever);
 
     thymeleaf = ThymeleafTemplateEngine.create(vertx);//实例化
 
+    final List<HttpVersion> alpns = Arrays.asList(HttpVersion.HTTP_1_1,HttpVersion.HTTP_2);
+    final HttpServerOptions options = new HttpServerOptions();
+    options.setAlpnVersions(alpns);
+
     //创建HttpServer
-    final HttpServer server = vertx.createHttpServer();
+    final HttpServer server = vertx.createHttpServer(options);
 
     //第二步,初始化|实例化 Router,若要添加跨域请求的话,随着就配置跨域
     router = Router.router(vertx);
