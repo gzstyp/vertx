@@ -11,7 +11,7 @@
   <description>
     Promise代表是一种约定,这个事情肯定是完成,完成包含两种情况,一个是失败的完成,一种是成功的完成;
     compose是接着操作???
-    compose它是一个Function类型,它就是把一个值转换成一个值(一个单向的Future的值),所以用它来做一个协作
+    compose它是一个Function类型,它就是把一个值转换成一个值(一个单向的Future的值),所以用它来做一个协作,当为onSuccess才下一步操作
 
     CompletableFuture是java原生的Future类,链式调用,传递下去
     map是把一个值映射到另一个值;
