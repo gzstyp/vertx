@@ -207,6 +207,13 @@ public final class Launcher extends AbstractVerticle {
       context.response().setStatusCode(302).putHeader("Location","/").end();
     });
 
+    //todo 非json格式,即普通的字符串
+    router.get("/str").handler(
+        ctx -> ctx
+          .response()
+          .setChunked(true)
+          .write("非json格式,即普通的字符串"));
+
     // 前端模版引擎用法,http://127.0.0.1/thymeleaf
     router.route("/thymeleaf").handler(context->{
       final JsonObject json = new JsonObject();
