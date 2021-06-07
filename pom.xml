@@ -9,6 +9,8 @@
   <version>v1.0.0</version>
 
   <description>
+    Promise是一种约定,这个事情肯定是完成,完成包含两种情况,一个是失败的完成,一种是成功的完成
+    CompletableFuture是java原生的Future类,链式调用,传递下去
     开发阶段:
     添加配置一个Application,其中把固定参数 io.vertx.core.Launcher 填写在Main class一栏;
     然后把下面启动类 ${main.verticle} 的值配置到 Program agruments,并在其前面指定run参数,即其值为 run com.fwtai.Launcher

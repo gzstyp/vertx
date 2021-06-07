@@ -25,11 +25,18 @@ import java.util.List;
 */
 public final class ToolLambda{
 
+  /**
+   * 优雅异步编程示例代码
+   * @param retriever
+   * @作者 田应平
+   * @QQ 444141300
+   * @创建时间 2021/6/7 11:25
+  */
   public static Future<JsonObject> getConfig(final ConfigRetriever retriever){
     final Promise<JsonObject> promise = Promise.promise();
     retriever.getConfig(asyncResult->{
       if(asyncResult.succeeded()){
-        promise.complete(asyncResult.result());//重点,固定写法
+        promise.complete(asyncResult.result());//重点,非常关键,固定写法
       }else{
         promise.fail(asyncResult.cause());//重点,固定写法
       }
@@ -56,7 +63,7 @@ public final class ToolLambda{
     final Promise<SqlConnection> promise = Promise.promise();
     client.getConnection(asyncResult ->{
       if(asyncResult.succeeded()){
-        promise.complete(asyncResult.result());//重点,固定写法
+        promise.complete(asyncResult.result());//重点,非常关键,固定写法
       }else{
         promise.fail(asyncResult.cause());//重点,固定写法
       }
@@ -71,7 +78,7 @@ public final class ToolLambda{
       if(handler.succeeded()){
         promise.complete(handler.result());//重点,固定写法
       }else{
-        promise.fail(handler.cause());//重点,固定写法
+        promise.fail(handler.cause());//重点,非常关键,固定写法
       }
     });
     return promise.future();//重点,固定写法
