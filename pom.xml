@@ -86,6 +86,9 @@
     事务
     https://blog.csdn.net/weixin_33696822/article/details/88112985
 
+    模糊查询
+    sql.append("where username LIKE CONCAT('%',?,'%') ");
+
   </description>
 
   <properties>
