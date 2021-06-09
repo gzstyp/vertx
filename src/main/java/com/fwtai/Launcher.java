@@ -253,7 +253,7 @@ public final class Launcher extends AbstractVerticle {
       //第四步,将router和 HttpServer 绑定[若是使用配置文件则这样实例化,如果不配置文件则把它挪动到lambda外边即可]
       server.requestHandler(router).listen(port,http -> {
         if (http.succeeded()){
-          startPromise.complete();
+          startPromise.complete();//todo 告知vert启动完毕
           logger.info("---应用启动成功---,http://127.0.0.1:"+port);
         } else {
           //startPromise.fail(http.cause());
