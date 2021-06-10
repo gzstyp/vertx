@@ -14,6 +14,8 @@ public final class ToolClient{
   private static final String key_data = "data";
   private static final String key_msg = "msg";
   private static final String key_code = "code";
+  private final static String key_total = "total";
+  private final static String record = "record";
 
   public static String createJson(final int code,final String msg){
     final JsonObject json = new JsonObject();
@@ -69,13 +71,15 @@ public final class ToolClient{
         return jsonEmpty();
       }
     }
+    final JsonObject json = new JsonObject();
     if(object instanceof List<?>){
       final List<?> list = (List<?>) object;
       if(list.size() <= 0){
         return jsonEmpty();
+      }else{
+        json.put(record,list.size());
       }
     }
-    final JsonObject json = new JsonObject();
     json.put(key_code,200);
     json.put(key_msg,"操作成功");
     json.put(key_data,object);
@@ -214,5 +218,27 @@ public final class ToolClient{
       }
     }
     return result;
+  }
+
+  /**分页*/
+  public static String listPage(final List<JsonObject> listData,final Integer total){
+    final JsonObject json = new JsonObject();
+    if(listData == null || listData.size() == 0 || total == null || total == 0){
+      json.put(key_code,201);
+      json.put(key_msg,"暂无数据");
+    }else{
+      json.put(key_code,200);
+      json.put(key_msg,"操作成功");
+      json.put(key_data,listData);
+      json.put(record,listData.size());
+      json.put(key_total,total);
+    }
+    return json.encode();
+  }
+
+  public static void composeParams(final HashMap<String,Object> params,final String key,final String value){
+    if(value != null && value.length()>0){
+      params.put(key,value);
+    }
   }
 }
