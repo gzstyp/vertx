@@ -191,9 +191,24 @@ public final class ToolClient{
     return null;
   }
 
-  /**获取表单必填的请求参数*/
+  /**获取表单必填的请求参数,不推荐*/
   public static HashMap<String,String> getParams(final RoutingContext context,final String... formField){
     final HashMap<String,String> result = new HashMap<>();
+    final HttpServerRequest request = context.request();
+    for(int x = 0; x < formField.length;x++){
+      final String field = formField[x].trim();
+      if(field.length() == 1 && field.equals("_")) continue;
+      final String value = request.getParam(field);
+      if(value == null || value.trim().length() <= 0) continue;
+      if(value.length() == 1 && value.equals("_")) continue;
+      result.put(field,value);
+    }
+    return result;
+  }
+
+  /**获取表单必填的请求参数,推荐*/
+  public static HashMap<String,Object> getParamsSql(final RoutingContext context,final String... formField){
+    final HashMap<String,Object> result = new HashMap<>();
     final HttpServerRequest request = context.request();
     for(int x = 0; x < formField.length;x++){
       final String field = formField[x].trim();
