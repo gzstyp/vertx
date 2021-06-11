@@ -57,6 +57,9 @@ public final class ToolClient{
   }
 
   public static String queryJson(final Object object){
+    if(object != null && object instanceof Exception){
+      return jsonError();
+    }
     if(object == null || object.toString().trim().length() == 0)
       return jsonEmpty();
     if(object instanceof Map<?,?>){
