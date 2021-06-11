@@ -24,6 +24,8 @@
 
     浏览器一直在转圈圈说明没有返回值
 
+    类型为时间日期时必须转为字符串 DATE_FORMAT(gt.createtime,'%Y-%m-%d %H:%i:%s') createtime
+
     ***********************↓这个好使↓***********************
     定义:
     public static Future《User》 authInfo(final Vertx vertx,final String token){
