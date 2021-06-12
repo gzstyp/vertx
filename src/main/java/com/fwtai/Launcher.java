@@ -77,6 +77,8 @@ public final class Launcher extends AbstractVerticle {
     methods.add(HttpMethod.GET);
     methods.add(HttpMethod.POST);
 
+    router.route().handler(this::AuthInterceptor);//是否被拦截
+
     //router.route().handler(CorsHandler.create("vertx\\.io").allowedMethods(methods));支持 "*.fwtai.com" ;支持正则表达式,此处只能用 handler,不能使用 blockingHandler,否则会报Internal Server Error错!!!
     router.route().handler(CorsHandler.create("http://192.168.3.108").allowCredentials(true).allowedHeader("content-type").maxAgeSeconds(86400).allowedMethods(methods));
 
@@ -263,6 +265,13 @@ public final class Launcher extends AbstractVerticle {
     }).onFailure(throwable->{
       logger.error("Launcher读取配置文件失败,"+throwable.getMessage());
     });
+  }
+
+  //todo 请求过滤器|拦截器,拦截所有请求,all全部的请求日志
+  private void AuthInterceptor(final RoutingContext context){
+    logger.info("请求:"+context.request().path());
+    //ToolClient.responseJson(context,ToolClient.jsonPermission());//终止返回
+    context.next();//继续下一个操作
   }
 
   //封装了重定向,调用方式:handler(this::redirect);
