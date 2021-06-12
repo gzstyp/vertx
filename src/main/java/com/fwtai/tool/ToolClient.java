@@ -60,6 +60,14 @@ public final class ToolClient{
     if(object != null && object instanceof Exception){
       return jsonError();
     }
+    try {
+      if(object != null){
+        object.toString();
+      }
+    } catch (final Exception e){
+      e.printStackTrace();
+      return jsonError();
+    }
     if(object == null || object.toString().trim().length() == 0)
       return jsonEmpty();
     if(object instanceof Map<?,?>){
