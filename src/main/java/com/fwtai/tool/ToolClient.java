@@ -157,6 +157,11 @@ public final class ToolClient{
     getResponse(context).end(jsonError());
   }
 
+  /**响应json数据:code=204;msg=系统出现错误*/
+  public static void responseError(final RoutingContext context,final String msg){
+    getResponse(context).end(jsonError(msg));
+  }
+
   /**响应json数据:code=200;msg=操作成功*/
   public static void responseSucceed(final RoutingContext context){
     getResponse(context).end(jsonSucceed());
