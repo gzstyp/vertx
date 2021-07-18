@@ -36,7 +36,7 @@ public final class JwtAuthVerticle extends AbstractVerticle {
 
     final HttpServer server = vertx.createHttpServer();
 
-    // 处理客户端请求,http://192.168.3.108:8080/?username=admin&password=admin 或 192.168.3.108:8080/?token=xxxx
+    // 处理客户端请求,http://192.168.3.108:8080/?username=admin&password=admin 或 http://192.168.3.108:8080/?token=xxxx
     server.requestHandler(request -> {
       final JsonObject jsonObject = parseQuery(request.query());
       if(jsonObject == null){
@@ -55,7 +55,6 @@ public final class JwtAuthVerticle extends AbstractVerticle {
             final JsonObject data = new JsonObject().put("userId","admin");
             final String jsonData = jwtAuth.generateToken(data);
             ToolClient.getResponse(request).end(ToolClient.queryJson(jsonData));
-            return;
           } else {
             final String jsonFailure = ToolClient.jsonFailure("认证失败,用户名或密码错误");
             ToolClient.getResponse(request).end(jsonFailure);
