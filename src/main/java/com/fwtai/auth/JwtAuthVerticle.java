@@ -19,9 +19,9 @@ import io.vertx.ext.auth.jwt.JWTAuthOptions;
  * @Email service@yinlz.com
  * @官网 <url>http://www.yinlz.com</url>
 */
-public class JwtAuthVerticle extends AbstractVerticle {
+public final class JwtAuthVerticle extends AbstractVerticle {
 
-  private JWTAuthOptions config = new JWTAuthOptions()
+  private final JWTAuthOptions config = new JWTAuthOptions()
     .addPubSecKey(
       new PubSecKeyOptions()
       .setAlgorithm("HS256")
@@ -29,7 +29,7 @@ public class JwtAuthVerticle extends AbstractVerticle {
       .setSymmetric(true)
     );
 
-  private JWTAuth jwtAuth = JWTAuth.create(vertx,config);
+  private final JWTAuth jwtAuth = JWTAuth.create(vertx,config);
 
   @Override
   public void start() throws Exception {
