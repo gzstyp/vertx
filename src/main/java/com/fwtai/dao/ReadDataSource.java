@@ -16,6 +16,7 @@ import io.vertx.sqlclient.Row;
 import io.vertx.sqlclient.RowSet;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.sqlclient.Tuple;
+import io.vertx.sqlclient.data.Numeric;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -315,5 +316,79 @@ public final class ReadDataSource{
     params.add(section);
     params.add(pageSize);
     return params;
+  }
+
+  //获取数据库连
+  public final Future<SqlConnection> getConnection(final MySQLPool client){
+    final Promise<SqlConnection> promise = Promise.promise();
+    client.getConnection(result->{
+      if(result.succeeded()){
+        promise.complete(result.result());
+      }else{
+        promise.fail(result.cause());
+      }
+    });
+    return promise.future();
+  }
+
+  //用获取到连接查询数据库
+  public final Future<RowSet<Row>> getRowSet(final SqlConnection sqlConnection,final String sql,final List<Object> params){
+    final Promise<RowSet<Row>> promise = Promise.promise();
+    sqlConnection.preparedQuery(sql).execute(Tuple.tuple(params),result->{
+      sqlConnection.close();
+      if(result.succeeded()){
+        promise.complete(result.result());
+      }else{
+        promise.fail(result.cause());
+      }
+    });
+    return promise.future();
+  }
+
+  //RowSet<Row>转为Map[JsonObject]
+  public final Future<JsonObject> getRowMap(final RowSet<Row> rowSet){
+    final Promise<JsonObject> promise = Promise.promise();
+    final List<String> columns = rowSet.columnsNames();
+    final JsonObject jsonObject = new JsonObject();
+    rowSet.forEach((item) ->{
+      for(int i = 0; i < columns.size();i++){
+        final String column = columns.get(i);
+        final Object value = item.getValue(column);
+        if(value != null){
+          if(value instanceof Numeric){
+            final Numeric numeric = (Numeric)value;
+            jsonObject.put(column,numeric.bigDecimalValue());
+          }else{
+            jsonObject.put(column,value);
+          }
+        }
+      }
+    });
+    promise.complete(jsonObject);
+    return promise.future();
+  }
+
+  //RowSet<Row>转为ListMap[JsonObject]->JsonArray
+  public final Future<ArrayList<JsonObject>> getRowList(final RowSet<Row> rowSet){
+    final ArrayList<JsonObject> list = new ArrayList<>();
+    final Promise<ArrayList<JsonObject>> promise = Promise.promise();
+    final List<String> columns = rowSet.columnsNames();
+    rowSet.forEach((item) ->{
+      final JsonObject jsonObject = new JsonObject();
+      for(int i = 0; i < columns.size(); i++){
+        final String column = columns.get(i);
+        final Object value = item.getValue(column);
+        if(value != null){
+          if(value instanceof Numeric){
+            jsonObject.put(column,((Numeric)value).bigDecimalValue());
+          }else{
+            jsonObject.put(column,value);
+          }
+        }
+      }
+      list.add(jsonObject);
+    });
+    promise.complete(list);
+    return promise.future();
   }
 }
